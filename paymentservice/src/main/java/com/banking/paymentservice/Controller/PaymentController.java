@@ -1,0 +1,48 @@
+package com.banking.paymentservice.Controller;
+
+import com.banking.paymentservice.DTO.PaymentRequest;
+import com.banking.paymentservice.DTO.PaymentResponse;
+import com.banking.paymentservice.Entity.Payment;
+import com.banking.paymentservice.Service.PaymentService;
+import com.razorpay.RazorpayException;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
+import lombok.RequiredArgsConstructor;
+import lombok.Value;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
+
+@RestController
+@RequestMapping("/payments")
+@Slf4j
+@RequiredArgsConstructor
+public class PaymentController {
+
+    private final PaymentService paymentService;
+
+
+    @PostMapping("/create")
+    public ResponseEntity<PaymentResponse> createPaymentOrder(@Valid @RequestBody PaymentRequest request)  throws RazorpayException {
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(paymentService.createPaymentOrder(request));
+    }
+
+
+    //razorpay webhook endpoint
+    @PostMapping("/webhook")
+    public ResponseEntity<String> handleWebhook(
+            @RequestBody Map<String,Object> payload
+    ){
+        paymentService.handleWebhook(payload);
+        return ResponseEntity.ok("Webhook processed");
+    }
+
+}
