@@ -137,6 +137,7 @@ public class AccountService {
 
     private AccountResponse mapToResponse(Account account) {
         AccountResponse response = new AccountResponse();
+        response.setId(account.getId());
         response.setAccountNumber(account.getAccountNumber());
         response.setAccountHolderName(account.getAccountHolderName());
         response.setPhone(account.getPhone());

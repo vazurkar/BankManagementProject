@@ -33,17 +33,17 @@ public class AccountController {
             return new ResponseEntity<>(account, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{accountnumber}")
+    @GetMapping("/{accountNumber}")
     public ResponseEntity<AccountResponse> getAccountsByAccountNumber(@PathVariable String accountNumber) {
         return ResponseEntity.ok(accountService.getAccountsByAccountNumber(accountNumber));
     }
 
-    @GetMapping("/{accountnumber}/balance")
+    @GetMapping("/{accountNumber}/balance")
     public ResponseEntity<String> getBalanceByAccountNumber(@PathVariable String accountNumber) {
         return ResponseEntity.ok(accountService.getBalanceByAccountNumber(accountNumber));
     }
 
-    @PutMapping("/{accountnumber}/block")
+    @PutMapping("/{accountNumber}/block")
     public ResponseEntity<String> blockAccount(@PathVariable String accountNumber) {
         accountService.blockAccount(accountNumber);
         return ResponseEntity.ok("Account blocked successfully");
@@ -52,7 +52,7 @@ public class AccountController {
     //SAGA STEP 1 - deduct balance
     //called by transaction service when transfer is initited
 
-    @PutMapping("/{accountnumber}/deduct")
+    @PutMapping("/{accountNumber}/deduct")
     public ResponseEntity<String>deductBalance(@PathVariable String accountNumber, @RequestParam BigDecimal amount) {
 
         accountService.deductBalance(accountNumber,amount);
@@ -64,7 +64,7 @@ public class AccountController {
     // 1- fraud detected -> refund sender (undo step 1)
     // 2- transaction completed -> credit receiver
 
-    @PutMapping("/{accountnumber}/credit")
+    @PutMapping("/{accountNumber}/credit")
     public ResponseEntity<String>creditBalance(@PathVariable String accountNumber, @RequestParam BigDecimal amount) {
 
         accountService.creditBalance(accountNumber,amount);
